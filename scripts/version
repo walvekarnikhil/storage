@@ -12,7 +12,7 @@ if [[ -z "$DIRTY" && -n "$GIT_TAG" ]]; then
     IMAGE_VERSION=${VERSION}
 else
     VERSION="${COMMIT}${DIRTY}"
-    IMAGE_VERSION=dev
+    IMAGE_VERSION=0.0.2
 fi
 
 if [ -z "$ARCH" ]; then

@@ -71,6 +71,7 @@ wait_mount_target_deleting() {
     done
 }
 
+
 init() {
     unset_aws_credentials_env
 
@@ -173,8 +174,18 @@ create() {
     wait_mount_target_transition "creating" "available"
 
     # tag the newly created volume
-    error=`aws efs create-tags --region ${EC2_REGION} --file-system-id ${FSID} --tags Key=Name,Value=${OPTS[name]} 2>&1`
-    if [ $? -ne 0 ]; then
+#    error=`aws efs create-tags --region ${EC2_REGION} --file-system-id ${FSID} --tags Key=Name,Value=${OPTS[name]} Key="Instance Type",Value="${OPTS[InstanceType]}" Key=Category,Value="${OPTS[Category]}" Key="Deployment Type",Value="${OPTS[DeploymentType]}" Key="Centric Owner",Value="${OPTS[CentricOwner]}" Key="Customer Name",Value="${OPTS[CustomerName]}" Key=Application,Value="${OPTS[Application]}" 2>&1`
+
+#   efsTags=${OPTS[TAGS]}
+
+   # efsTags=`echo -e "$efsTags" | tr -d '\\\"' 2>&1` 
+#   efsTags=`echo -e "$efsTags" | tr '\\\"' "'" 2>&1`
+
+#   applyTags="aws efs create-tags --region ${EC2_REGION} --file-system-id ${FSID} --tags Key=Name,Value=${OPTS[name]} ${efsTags} 2>&1"
+
+#   error=$( echo ${applyTags} ) 
+    error="$(aws efs create-tags --region ${EC2_REGION} --file-system-id ${FSID} --tags Key=Name,Value=${OPTS[name]} ${OPTS[TAGS]} 2>&1)"
+   if [ $? -ne 0 ]; then
         print_error "Failed in create: create-tags for EFS ${FSID} Key=Name,Value=${OPTS[name]} failed. ${error}}"
     fi
 
