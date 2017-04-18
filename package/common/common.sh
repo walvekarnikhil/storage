@@ -1,4 +1,4 @@
-set -o pipefail::
+set -o pipefail
 if [ "$RANCHER_DEBUG" == "true" ]; then set -x; fi
 
 err() {
