@@ -1,4 +1,4 @@
-set -o pipefail
+set -o pipefail::
 if [ "$RANCHER_DEBUG" == "true" ]; then set -x; fi
 
 err() {
@@ -53,7 +53,7 @@ main()
 declare -A OPTS
 parse()
 {
-    mapfile -t < <(echo "$1" | jq -r 'to_entries | map([.key, .value]) | .[]' | jq '.[]' | sed 's!^"\(.*\)"$!\1!g')
+    mapfile -t < <(echo "$1" | jq -r 'to_entries | map([.key, .value]) | .[]' | jq '.[]' | sed 's!^"\(.*\)"$!\1!g' | sed 's!\\\"!"!g')
     for ((i=0;i < ${#MAPFILE[@]} ; i+=2)) do
         OPTS[${MAPFILE[$i]}]=${MAPFILE[$((i+1))]}
     done
